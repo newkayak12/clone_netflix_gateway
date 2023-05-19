@@ -1,6 +1,6 @@
 package com.netflix_clone.gateway.config.filter;
 
-import lombok.RequiredArgsConstructor;
+import com.netflix_clone.gateway.constant.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -14,6 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created on 2023-05-18
  * Project gateway
@@ -22,8 +26,13 @@ import reactor.core.publisher.Mono;
 @DependsOn(value = "constant")
 @Slf4j
 
+
 public class AuthorizationTokenFilter extends AbstractGatewayFilterFactory<AuthorizationTokenFilter.Config> {
     private BaseFilter baseFilter;
+    private Pattern[] inboundExceptPatterns = {
+                                            Pattern.compile("/sign/\\.*", Pattern.DOTALL),
+                                            Pattern.compile("/check/id/\\.*", Pattern.DOTALL),
+                                          };
 
     public AuthorizationTokenFilter(BaseFilter baseFilter) {
         super(Config.class);
@@ -34,21 +43,30 @@ public class AuthorizationTokenFilter extends AbstractGatewayFilterFactory<Autho
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
-            ServerHttpResponse response = exchange.getResponse();
+
 
             baseFilter.logger(request);
 
             RequestPath path = request.getPath();
             String pathValue = path.value();
-            log.warn("PATHVALUE {}", pathValue);
+            Matcher matcher = null;
+
+            log.warn("PATH ::::::::: {}", pathValue);
+            navigationGuard: for (Pattern pattern : inboundExceptPatterns){
+
+                pattern.matcher(pathValue);
+                if(matcher.find())  return chain.filter(exchange);
+
+            }
+
 
 
             HttpHeaders headers = request.getHeaders();
 
-//            if(!headers.containsKey(Constant.TOKEN_NAME)) return handlingUnAuthorization(exchange);
-//            if(request.getHeaders().isEmpty())  return handlingUnAuthorization(exchange);
-//            String token = request.getHeaders().get(Constant.TOKEN_NAME).stream().findAny().orElseGet(() -> null);
-//            if(Objects.isNull(token)) return handlingUnAuthorization(exchange);
+            if(!headers.containsKey(Constant.TOKEN_NAME)) return handlingUnAuthorization(exchange);
+            if(request.getHeaders().isEmpty())  return handlingUnAuthorization(exchange);
+            String token = request.getHeaders().get(Constant.TOKEN_NAME).stream().findAny().orElseGet(() -> null);
+            if(Objects.isNull(token)) return handlingUnAuthorization(exchange);
 
             return chain.filter(exchange);
         });

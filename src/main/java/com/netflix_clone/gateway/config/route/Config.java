@@ -1,6 +1,7 @@
 package com.netflix_clone.gateway.config.route;
 
 import com.netflix_clone.gateway.config.filter.AuthorizationTokenFilter;
+import com.netflix_clone.gateway.config.filter.TokenizedFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class Config {
     private final AuthorizationTokenFilter authorizationTokenFilter;
+    private final TokenizedFilter tokenizedFilter;
 
     @Bean
     public RouteLocator gateWayRoute(RouteLocatorBuilder builder){
@@ -24,7 +26,11 @@ public class Config {
                 )
                 .route(
                         predicate -> predicate.path("/api/v1/user/**")
-                                .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
+                                .filters(gatewayFilterSpec -> {
+                                    gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config()));
+                                    gatewayFilterSpec.filter(tokenizedFilter.apply(new TokenizedFilter.Config()));
+                                    return  gatewayFilterSpec;
+                                })
                                 .uri("lb://NETFLIX-CLONE-USER-SERVICE")
                 )
                 .route(
