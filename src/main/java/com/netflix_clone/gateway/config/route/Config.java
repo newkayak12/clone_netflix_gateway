@@ -33,6 +33,11 @@ public class Config {
                                 .uri("lb://NETFLIX-CLONE-USER-SERVICE")
                 )
 
+                .route(
+                        predicate -> predicate.path("/api/v1/file/**")
+                                              .uri("lb://NETFLIX-CLONE-FILE-SERVICE")
+                )
+
                 .build();
     }
 }
