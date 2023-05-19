@@ -3,7 +3,6 @@ package com.netflix_clone.gateway.config.token;
 import com.netflix_clone.gateway.constant.Constant;
 import com.netflix_clone.gateway.exceptions.BecauseOf;
 import com.netflix_clone.gateway.exceptions.CommonException;
-import com.netflix_clone.gateway.exceptions.TokenException;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
