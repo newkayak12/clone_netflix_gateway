@@ -52,21 +52,19 @@ public class AuthorizationTokenFilter extends AbstractGatewayFilterFactory<Autho
             Matcher matcher = null;
 
             log.warn("PATH ::::::::: {}", pathValue);
-            navigationGuard: for (Pattern pattern : inboundExceptPatterns){
-
-                pattern.matcher(pathValue);
-                if(matcher.find())  return chain.filter(exchange);
-
-            }
+//            navigationGuard: for (Pattern pattern : inboundExceptPatterns){
+//                pattern.matcher(pathValue);
+//                if(matcher.find())  return chain.filter(exchange);
+//            }
 
 
 
             HttpHeaders headers = request.getHeaders();
-
-            if(!headers.containsKey(Constant.TOKEN_NAME)) return handlingUnAuthorization(exchange);
-            if(request.getHeaders().isEmpty())  return handlingUnAuthorization(exchange);
-            String token = request.getHeaders().get(Constant.TOKEN_NAME).stream().findAny().orElseGet(() -> null);
-            if(Objects.isNull(token)) return handlingUnAuthorization(exchange);
+//
+//            if(!headers.containsKey(Constant.TOKEN_NAME)) return handlingUnAuthorization(exchange);
+//            if(request.getHeaders().isEmpty())  return handlingUnAuthorization(exchange);
+//            String token = request.getHeaders().get(Constant.TOKEN_NAME).stream().findAny().orElseGet(() -> null);
+//            if(Objects.isNull(token)) return handlingUnAuthorization(exchange);
 
             return chain.filter(exchange);
         });

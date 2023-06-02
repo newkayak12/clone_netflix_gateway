@@ -1,5 +1,6 @@
 package com.netflix_clone.gateway.config.token;
 
+import com.netflix_clone.gateway.config.route.Config;
 import com.netflix_clone.gateway.constant.Constant;
 import com.netflix_clone.gateway.exceptions.BecauseOf;
 import com.netflix_clone.gateway.exceptions.CommonException;
@@ -11,7 +12,10 @@ import org.apache.commons.codec.binary.Base64;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.Map;
 
@@ -22,11 +26,20 @@ import java.util.Map;
 
 @Component(value = "token_control")
 @DependsOn(value = "constant")
-@RequiredArgsConstructor
-public class TokenControl {
-    String prefix = "Bearer ";
+public final class TokenControl {
+    private final String prefix = "Bearer ";
+    private final String saltPath;
+
+
+    public TokenControl(String saltPath) {
+        this.saltPath = saltPath;
+    }
 
     private String getSecretKey() {
+        Path path = Path.of(saltPath);
+        if(!Files.exists(path))
+        String privateKey = ;
+
         return Base64.encodeBase64String(Constant.SALT.getBytes(StandardCharsets.UTF_8));
     }
 

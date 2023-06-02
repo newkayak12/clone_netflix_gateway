@@ -17,12 +17,36 @@ public class Config {
 
     @Bean
     public RouteLocator gateWayRoute(RouteLocatorBuilder builder){
+//               BOARD
         return builder.routes()
                 .route(
                         predicate -> predicate.path("/api/v1/board/**")
                                 .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
                                 .uri("lb://NETFLIX-CLONE-BOARD-SERVICE")
 
+                )
+//                BOARD
+//
+//                USER
+                .route(
+                        predicate -> predicate.path("/api/v1/user/**")
+                                .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
+                                .uri("lb://NETFLIX-CLONE-USER-SERVICE")
+                )
+                .route(
+                        predicate -> predicate.path("/api/v1/profile/**")
+                                .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
+                                .uri("lb://NETFLIX-CLONE-USER-SERVICE")
+                )
+                .route(
+                        predicate -> predicate.path("/api/v1/ticket/**")
+                                .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
+                                .uri("lb://NETFLIX-CLONE-USER-SERVICE")
+                )
+                .route(
+                        predicate -> predicate.path("/api/v1/pay/**")
+                                .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
+                                .uri("lb://NETFLIX-CLONE-USER-SERVICE")
                 )
                 .route(
                         predicate -> predicate.path("/api/v1/user/**")
@@ -33,17 +57,19 @@ public class Config {
                                 })
                                 .uri("lb://NETFLIX-CLONE-USER-SERVICE")
                 )
+//                USER
+//
+//                MOVIE
                 .route(
                         predicate -> predicate.path("/api/v1/movie/**")
                                 .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
                                 .uri("lb://NETFLIX-CLONE-USER-SERVICE")
                 )
-
                 .route(
                         predicate -> predicate.path("/api/v1/file/**")
                                               .uri("lb://NETFLIX-CLONE-FILE-SERVICE")
                 )
-
+//                MOVIE
                 .build();
     }
 }

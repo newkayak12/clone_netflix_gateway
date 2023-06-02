@@ -48,24 +48,24 @@ public class TokenizedFilter extends AbstractGatewayFilterFactory<TokenizedFilte
 
         return ((exchange, chain) -> {
 
-            exchange.getResponse().beforeCommit(() -> {
-                ServerHttpRequest request = exchange.getRequest();
-                ServerHttpResponse response = exchange.getResponse();
-
-                log.warn("BEFORE COMMIT");
-
-
-                RequestPath path = request.getPath();
-                String pathValue = path.value();
-                HttpStatus status = response.getStatusCode();
-
-                List<HttpStatus> statuses = Arrays.asList(HttpStatus.OK, HttpStatus.PARTIAL_CONTENT);
-                if(statuses.contains(status) &&outboundPattern.matcher(pathValue).find()){
-                    ServerHttpResponseDecorator decoratedResponse  = this.decorateResponse(exchange, response);
-                    return chain.filter(exchange.mutate().response(decoratedResponse).build());
-                }
-                return chain.filter(exchange);
-            });
+//            exchange.getResponse().beforeCommit(() -> {
+//                ServerHttpRequest request = exchange.getRequest();
+//                ServerHttpResponse response = exchange.getResponse();
+//
+//                log.warn("BEFORE COMMIT");
+//
+//
+//                RequestPath path = request.getPath();
+//                String pathValue = path.value();
+//                HttpStatus status = response.getStatusCode();
+//
+//                List<HttpStatus> statuses = Arrays.asList(HttpStatus.OK, HttpStatus.PARTIAL_CONTENT);
+//                if(statuses.contains(status) &&outboundPattern.matcher(pathValue).find()){
+//                    ServerHttpResponseDecorator decoratedResponse  = this.decorateResponse(exchange, response);
+//                    return chain.filter(exchange.mutate().response(decoratedResponse).build());
+//                }
+//                return chain.filter(exchange);
+//            });
 
             return chain.filter(exchange);
         });
