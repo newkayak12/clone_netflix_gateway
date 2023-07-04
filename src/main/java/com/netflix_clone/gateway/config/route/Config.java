@@ -20,48 +20,42 @@ public class Config {
 //               BOARD
         return builder.routes()
                 .route(
-                        predicate -> predicate.path("/api/v1/board/**")
+                        predicate -> predicate.path(
+                                              "/api/v1/banner/**",
+                                                        "/api/v1/comment/**",
+                                                        "/api/v1/cs/**",
+                                                        "/api/v1/faq/**",
+                                                        "/api/v1/report/**",
+                                                        "/api/v1/notice/**"
+                                                   )
                                 .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
                                 .uri("lb://NETFLIX-CLONE-BOARD-SERVICE")
-
                 )
 //                BOARD
 //
 //                USER
                 .route(
-                        predicate -> predicate.path("/api/v1/user/**")
+                        predicate -> predicate.path(
+                                           "/api/v1/user/**",
+                                                     "/api/v1/profile/**",
+                                                     "/api/v1/ticket/**",
+                                                     "/api/v1/user/**",
+                                                     "/api/v1/pay/**"
+                                                   )
                                 .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
-                                .uri("lb://NETFLIX-CLONE-USER-SERVICE")
-                )
-                .route(
-                        predicate -> predicate.path("/api/v1/profile/**")
-                                .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
-                                .uri("lb://NETFLIX-CLONE-USER-SERVICE")
-                )
-                .route(
-                        predicate -> predicate.path("/api/v1/ticket/**")
-                                .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
-                                .uri("lb://NETFLIX-CLONE-USER-SERVICE")
-                )
-                .route(
-                        predicate -> predicate.path("/api/v1/pay/**")
-                                .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
-                                .uri("lb://NETFLIX-CLONE-USER-SERVICE")
-                )
-                .route(
-                        predicate -> predicate.path("/api/v1/user/**")
-                                .filters(gatewayFilterSpec -> {
-                                    gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config()));
-                                    gatewayFilterSpec.filter(tokenizedFilter.apply(new TokenizedFilter.Config()));
-                                    return  gatewayFilterSpec;
-                                })
                                 .uri("lb://NETFLIX-CLONE-USER-SERVICE")
                 )
 //                USER
 //
 //                MOVIE
                 .route(
-                        predicate -> predicate.path("/api/v1/movie/**")
+                        predicate -> predicate.path(
+                                "/api/v1/watched/**",
+                                          "/api/v1/person/**",
+                                          "/api/v1/favorite/**",
+                                          "/api/v1/contents/**",
+                                          "/api/v1/category/**"
+                                )
                                 .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
                                 .uri("lb://NETFLIX-CLONE-USER-SERVICE")
                 )
@@ -73,11 +67,3 @@ public class Config {
                 .build();
     }
 }
-//    route(r -> r.path("/first-service/**")
-//        .uri("http://localhost:8081"))
-//        //second-service
-//        .route(r -> r.path("/second-service/**")
-//        .filters(f -> f.addResponseHeader("second-request", "second-request-header")
-//        .addResponseHeader("second-response", "second-response-header"))
-//        .uri("http://localhost:8082"))
-//        .build();
