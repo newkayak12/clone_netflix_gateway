@@ -62,6 +62,9 @@ public class AuthorizationTokenFilter extends AbstractGatewayFilterFactory<Autho
 
             log.warn("PATH OUT ::::::::: {}", pathValue);
             HttpHeaders headers = request.getHeaders();
+            log.warn("KEY ::: {}", headers);
+            log.warn("KEY ::: {}", headers.containsKey(Constant.TOKEN_NAME));
+            log.warn("KEY ::: {}", Constant.TOKEN_NAME);
 //
             if(!headers.containsKey(Constant.TOKEN_NAME)) return handlingUnAuthorization(exchange);
             if(request.getHeaders().isEmpty())  return handlingUnAuthorization(exchange);

@@ -57,7 +57,7 @@ public class Config {
                                           "/api/v1/category/**"
                                 )
                                 .filters(gatewayFilterSpec -> gatewayFilterSpec.filter(authorizationTokenFilter.apply(new AuthorizationTokenFilter.Config())))
-                                .uri("lb://NETFLIX-CLONE-USER-SERVICE")
+                                .uri("lb://NETFLIX-CLONE-MOVIE-SERVICE")
                 )
                 .route(
                         predicate -> predicate.path("/api/v1/file/**")
